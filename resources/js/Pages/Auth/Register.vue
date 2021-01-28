@@ -2,10 +2,12 @@
   <RegisterContainer>
     <header>
       <img :src="'/images/logo.svg'" />
-      <router-link> Already registered? </router-link>
+      <h1>Kalorie Kounter</h1>
     </header>
     <div v-if="step == 1">
+      <div></div>
       <form @submit.prevent="submit">
+        <LineStep v-bind:stepp="step" />
         <div>
           <label for="name">Name</label>
           <input
@@ -19,47 +21,64 @@
         </div>
         <div>
           <label for="email">Email</label>
-          <input id="email" type="email" v-model="form.email" required />
+          <div>
+            <div>
+              <img :src="'/images/email.svg'" />
+            </div>
+            <input id="email" type="email" v-model="form.email" required />
+          </div>
         </div>
         <div>
           <label for="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            v-model="form.password"
-            required
-            autocomplete="new-password"
-          />
+          <div>
+            <div>
+              <img :src="'/images/password.svg'" />
+            </div>
+            <input
+              id="password"
+              type="password"
+              v-model="form.password"
+              required
+              autocomplete="new-password"
+            />
+          </div>
         </div>
         <div>
           <label for="password_confirmation">Confirm password</label>
-          <input
-            id="password_confirmation"
-            type="password"
-            v-model="form.password_confirmation"
-            required
-            autocomplete="new-password"
-          />
+          <div>
+            <div>
+              <img :src="'/images/password.svg'" />
+            </div>
+            <input
+              id="password_confirmation"
+              type="password"
+              v-model="form.password_confirmation"
+              required
+              autocomplete="new-password"
+            />
+          </div>
         </div>
         <button type="submit">Next</button>
       </form>
     </div>
     <div v-if="step == 2">
+      <div></div>
       <form @submit.prevent="finish">
+        <LineStep v-bind:stepp="step" />
+
         <div>
-          <label for="height">Your Height</label>
+          <label for="height">Your height (cm)</label>
           <input
             id="height"
             type="number"
             v-model="form.height"
             required
-            pattern="^\d*(\.\d{0,2})?$"
             autocomplete="height"
             placeholder="100 cm"
           />
         </div>
         <div>
-          <label for="weigth">Your weight</label>
+          <label for="weigth">Your weight (Kg)</label>
           <input
             id="weigth"
             type="number"
@@ -80,31 +99,31 @@
 
 <script>
 import { RegisterContainer } from "../styles/Register.js";
+import LineStep from "../../components/LineStep/LineStep";
+import axios from "axios";
+
 export default {
   data() {
     return {
-      form: this.$inertia.form({
+      form: {
         name: "",
         email: "",
         password: "",
         height: 0,
-        width: 0,
+        weight: 0,
         password_confirmation: "",
-      }),
+      },
       step: 1,
       message: false,
     };
   },
   components: {
     RegisterContainer,
+    LineStep,
   },
   methods: {
     finish() {
-      this.form
-        .transform((data) => ({
-          ...data,
-        }))
-        .post(this.route("register"));
+        axios.post(this.route('register'), this.form).then(res => console.log(res)).catch(err => console.log(err));
     },
     submit() {
       if (this.form.password !== this.form.password_confirmation) {

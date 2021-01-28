@@ -1,93 +1,115 @@
 import styled from 'vue-styled-components';
 
+import landing from '../assets/landing.svg';
+
 export const RegisterContainer = styled.section`
     width: 100vw;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    >header{
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
+    background-image: url(${landing});
+    background-size: 24%;
+    background-repeat: no-repeat;
+    background-position-x: 20px;
+    background-position-y: 300px;
+    background-color: #FFFAF9;
+    header{
+        width: 100%;
         padding: 10px 20px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
         img{
-            width: 100px;
-            margin-right: 20px;
+            width: 70px;
+            margin-right: 10px;
         }
-        router-link{
-            font-family: Inter, sans-serif;
-            color: #303030;
-            font-size: 14px;
-            cursor: pointer;
-            :hover{
-                text-decoration: underline;
-            }
+        h1{
+            color: #EF6A74;
+            font-family: Poppins, sans-serif;
+            font-size: 22px;
+            font-weight: 500;
         }
     }
     >div{
         width: 100%;
-        margin-bottom: 90px;
-    }
-    form{
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-        div{
-            margin: 15px auto;
-            label{
-                font-family: Inter, sans-serif;
-                font-size: 14px;
-            }
-            input{
-                width: 100%;
-                margin-top: 4px;
-                padding: 8px 12px;
-                border: 2px solid transparent;
-                outline: none;
-                font-family: Inter, sans-serif;
-                transition: all 0.3s;
-                font-size: 14px;
-                border-radius: 5px;
-                border: 2px solid #EAEAEA;
-                :focus{
-                    border-color: #FA4D56;
-                }
-                :-webkit-autofill {
-                    -webkit-text-fill-color: #303030 !important;
-                    -webkit-box-shadow: 0 0 0 30px white inset;
-                }
-            }
-        }
-        footer{
-            button:last-child{
-                margin-top: 10px;
-                background: white;
-                color: #FC646C;
-                border-color: #FC646C;
-                margin-top: 20px!important;
-            }
-        }
-        button{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        form{
+            margin-top: 200px;
             width: 100%;
-            max-width: 200px;
-            margin: 0px auto;
-            margin-top: 60px!important;
-            display: block;
-            border: 2px solid transparent;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            background: #FC646C;
-            outline: none;
-            cursor: pointer;
-            font-family: Inter, sans-serif;
-            color: #F5F5F5;
-            text-transform: uppercase;
-            font-size: 16px;
-            transition: all 0.3s;
-            :hover{
-                background: #FA4D56;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            >div{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-top: 10px;
+                label{
+                    font-family: Inter, sans-serif;
+                    font-size: 14px;
+                    margin-bottom: 4px;
+                }
+                >div{
+                    display: flex;
+                    border-radius: 5px 0px 0px 5px;
+                    border: 2px solid #AAA9A9;
+                    div{
+                        width: 40px;
+                        display: grid;
+                        place-items: center;
+                        border-right: 2px solid #AAA9A9;
+                        img{
+                            width: 24px;
+                        }
+                        width: 16%;
+                    }
+                }
+                input[type=text], input[type=number]{
+                    border-radius: 5px;
+                    border: 2px solid #AAA9A9;
+                    padding: 8px 10px;
+                }
+                input{
+                    width: 100%;
+                    outline: none;
+                    padding: 8px 10px;
+                    font-size: 14px;
+                    border: 0;
+                    font-family: Inter, sans-serif;
+                }
+            }
+            button{
+                display: block;
+                width: 100%;
+                max-width: 300px;
+                margin: 40px auto;
+                border: 0px;
+                padding: 10px 20px;
+                font-family: Inter, sans-serif;
+                font-size: 14px;
+                text-transform: uppercase;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: 600;
+                color: #FFF;
+                background: #EF6A74;
+            }
+            footer{
+                width: 100%;
+                button:first-child{
+                    margin-top: 40px!important;
+                    margin: 0px auto;
+                }
+                button:last-child{
+                    margin: 10px auto;
+                    border: 2px solid #EF6A74;
+                    background: transparent;
+                    color: #EF6A74;
+                }
             }
         }
     }
