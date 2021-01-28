@@ -1,95 +1,124 @@
 <template>
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
-
-        <jet-validation-errors class="mb-4" />
-
-        <form @submit.prevent="submit">
-            <div>
-                <jet-label for="name" value="Name" />
-                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
-            </div>
-
-            <div class="mt-4">
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
-            </div>
-
-            <div class="mt-4">
-                <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <jet-label for="password_confirmation" value="Confirm Password" />
-                <jet-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4" v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature">
-                <jet-label for="terms">
-                    <div class="flex items-center">
-                        <jet-checkbox name="terms" id="terms" v-model="form.terms" />
-
-                        <div class="ml-2">
-                            I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900">Privacy Policy</a>
-                        </div>
-                    </div>
-                </jet-label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <inertia-link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Already registered?
-                </inertia-link>
-
-                <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </jet-button>
-            </div>
-        </form>
-    </jet-authentication-card>
+  <RegisterContainer>
+    <header>
+      <img :src="'/images/logo.svg'" />
+      <router-link> Already registered? </router-link>
+    </header>
+    <div v-if="step == 1">
+      <form @submit.prevent="submit">
+        <div>
+          <label for="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            v-model="form.name"
+            required
+            autofocus
+            autocomplete="name"
+          />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="email" v-model="form.email" required />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            v-model="form.password"
+            required
+            autocomplete="new-password"
+          />
+        </div>
+        <div>
+          <label for="password_confirmation">Confirm password</label>
+          <input
+            id="password_confirmation"
+            type="password"
+            v-model="form.password_confirmation"
+            required
+            autocomplete="new-password"
+          />
+        </div>
+        <button type="submit">Next</button>
+      </form>
+    </div>
+    <div v-if="step == 2">
+      <form @submit.prevent="finish">
+        <div>
+          <label for="height">Your Height</label>
+          <input
+            id="height"
+            type="number"
+            v-model="form.height"
+            required
+            pattern="^\d*(\.\d{0,2})?$"
+            autocomplete="height"
+            placeholder="100 cm"
+          />
+        </div>
+        <div>
+          <label for="weigth">Your weight</label>
+          <input
+            id="weigth"
+            type="number"
+            v-model="form.weight"
+            required
+            placeholder="80 Kg"
+            autocomplete="weigth"
+          />
+        </div>
+        <footer>
+          <button type="submit">Next</button>
+          <button type="button" v-on:click="back">Back</button>
+        </footer>
+      </form>
+    </div>
+  </RegisterContainer>
 </template>
 
 <script>
-    import JetAuthenticationCard from '@/Jetstream/AuthenticationCard'
-    import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo'
-    import JetButton from '@/Jetstream/Button'
-    import JetInput from '@/Jetstream/Input'
-    import JetCheckbox from "@/Jetstream/Checkbox";
-    import JetLabel from '@/Jetstream/Label'
-    import JetValidationErrors from '@/Jetstream/ValidationErrors'
-
-    export default {
-        components: {
-            JetAuthenticationCard,
-            JetAuthenticationCardLogo,
-            JetButton,
-            JetInput,
-            JetCheckbox,
-            JetLabel,
-            JetValidationErrors
-        },
-
-        data() {
-            return {
-                form: this.$inertia.form({
-                    name: '',
-                    email: '',
-                    password: '',
-                    password_confirmation: '',
-                    terms: false,
-                })
-            }
-        },
-
-        methods: {
-            submit() {
-                this.form.post(this.route('register'), {
-                    onFinish: () => this.form.reset('password', 'password_confirmation'),
-                })
-            }
-        }
-    }
+import { RegisterContainer } from "../styles/Register.js";
+export default {
+  data() {
+    return {
+      form: this.$inertia.form({
+        name: "",
+        email: "",
+        password: "",
+        height: 0,
+        width: 0,
+        password_confirmation: "",
+      }),
+      step: 1,
+      message: false,
+    };
+  },
+  components: {
+    RegisterContainer,
+  },
+  methods: {
+    finish() {
+      this.form
+        .transform((data) => ({
+          ...data,
+        }))
+        .post(this.route("register"));
+    },
+    submit() {
+      if (this.form.password !== this.form.password_confirmation) {
+        this.message = true;
+      } else {
+        this.step += 1;
+      }
+    },
+    next() {
+      this.step += 1;
+    },
+    back() {
+      this.step -= 1;
+    },
+  },
+};
 </script>
